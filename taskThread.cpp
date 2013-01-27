@@ -13,10 +13,12 @@ TaskThread::~TaskThread()
 
 TaskMutex::TaskMutex()
 {
+    pthread_mutex_init(&mMutexObj, NULL);
 }
 
 TaskMutex::~TaskMutex()
 {
+    pthread_mutex_destroy(&mMutexObj);
 }
 
 void TaskMutex::lock()
@@ -27,6 +29,34 @@ void TaskMutex::lock()
 void TaskMutex::unlock()
 {
     pthread_mutex_unlock(&mMutexObj);
+}
+
+TaskSemaphore::TaskSemaphore(unsigned int initialCount)
+{
+     sem_init(&mSemObj, 0, initialCount);
+}
+
+TaskSemaphore::~TaskSemaphore()
+{
+    sem_destroy(&mSemObj);
+}
+
+void TaskSemaphore::post()
+{
+    sem_post(&mSemObj); 
+}
+
+int TaskSemaphore::wait()
+{
+    return sem_wait(&mSemObj);
+}
+
+int TaskSemaphore::getCnt()
+{
+    int result; 
+    sem_getvalue(&mSemObj, &result); 
+    
+    return result;
 }
 
 

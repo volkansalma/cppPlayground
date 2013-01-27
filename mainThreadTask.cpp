@@ -5,6 +5,7 @@
 using namespace std;
 
 TaskMutex myMutex;
+TaskSemaphore mySem;
 
 void* myTaskFunction1(void* pData)
 {
@@ -18,6 +19,8 @@ void* myTaskFunction1(void* pData)
         cout<<"Task"<<*param<<":"<<cnt<<endl;
         cnt++;
         myMutex.unlock();
+        
+        mySem.wait();
         TaskUtilities::TaskSleepUSec(100); 
     }
 }
@@ -34,6 +37,8 @@ void* myTaskFunction2(void* pData)
         cout<<"Task"<<*param<<":"<<cnt<<endl;
         cnt++; 
         myMutex.unlock();
+        
+        mySem.post();
         TaskUtilities::TaskSleepSec(1);
     }
 }

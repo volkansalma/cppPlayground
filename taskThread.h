@@ -9,6 +9,7 @@
 #endif
 
 #include <pthread.h>
+#include <semaphore.h>
 
 class TaskThread
 {
@@ -31,6 +32,19 @@ public:
       
 private:
     pthread_mutex_t mMutexObj;
+};
+
+class TaskSemaphore
+{
+public:
+    TaskSemaphore(unsigned int initialCount = 0);
+    ~TaskSemaphore();
+    void post();
+    int wait();
+    int getCnt();  
+
+private:
+    sem_t mSemObj;
 };
 
 class TaskUtilities
