@@ -1,10 +1,9 @@
 #include "taskThread.h"
-#include <iostream>
 
-
-TaskThread::TaskThread(void* (*pTaskFunction)(void*), int priority)
+TaskThread::TaskThread(void* (*pTaskFunction)(void*), int taskPriority, 
+                       void* pData)
 {
-    pthread_create(&mThreadObj, NULL, pTaskFunction, NULL);
+    pthread_create(&mThreadObj, NULL, pTaskFunction, pData);
 }
 
 TaskThread::~TaskThread()
@@ -31,14 +30,14 @@ void TaskMutex::unlock()
 }
 
 
-void TaskSleepUS(unsigned int miliSecSleepTime)
+void TaskUtilities::TaskSleepUSec(unsigned int miliSecSleepTime)
 {
-    usleep(miliSecSleepTime);
+    Sleep(miliSecSleepTime);
 }
 
-void TaskSleepS(unsigned int secSleepTime)
+void TaskUtilities::TaskSleepSec(unsigned int secSleepTime)
 {
-    sleep(secSleepTime);
+    Sleep(secSleepTime * 1000);
 }
     
     

@@ -1,17 +1,23 @@
 #ifndef _TASK_THREAD_H
 #define _TASK_THREAD_H
 
-#include <cstdlib>
+#ifdef WIN32
+#include <windows.h> // needed for Sleep 
+#else
+#include <unistd.h>
+#define Sleep(x) usleep((x)*1000)
+#endif
+
 #include <pthread.h>
 
 class TaskThread
 {
 public:
-    TaskThread(void* (*pTaskFunction)(void*), int priority);
+    TaskThread(void* (*pTaskFunction)(void*), int taskPriority = 0, 
+                       void* pData = NULL);
     ~TaskThread();
       
 private:
-    void* (*pmTaskFunction)(void*); 
     pthread_t mThreadObj;   
 };
 
@@ -27,8 +33,11 @@ private:
     pthread_mutex_t mMutexObj;
 };
 
-void TaskSleepUS(unsigned int miliSecSleepTime);
-
-void TaskSleepS(unsigned int secSleepTime);
+class TaskUtilities
+{
+public:
+    static void TaskSleepUSec(unsigned int miliSecSleepTime);
+    static void TaskSleepSec(unsigned int secSleepTime);
+};
 
 #endif //_TASK_THREAD_CPP
